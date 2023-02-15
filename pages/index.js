@@ -6,8 +6,10 @@ import Navbar from '../components/layouts/Navbar'
 import Layout from '../components/layouts/Layout'
 import Image from 'next/image'
 import ButtonFloat from '../components/buttons/ButtonFloat'
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -16,19 +18,24 @@ export default function Home() {
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <Layout>
-        <Navbar />
+        <Navbar 
+          onLogin={()=>router.push('/login')}
+          onClickLogo={()=>router.push('/')}
+        />
         <Flex
           justify={'space-between'}
           pt={'37px'}
           align={'center'}
+          flexDirection={{ base: 'column-reverse', lg:'row' }}
         >
           <Box
-            maxWidth={'555px'}
+            maxWidth={{ base:'320px',md:'600px',lg:'555px' }}
+            mt={{ base:'25px', md:'50px', lg:'0' }}
           >
             <Text
-              fontSize={'52px'}
+              fontSize={{ base: '30px', md: '50px', lg: '52px' }}
               fontWeight={'700'}
-              lineHeight={'62px'}
+              lineHeight={{ sm:'40px',md:'60px',lg:'62px' }}
               color={'fontPrimary'}
               mb={'18px'}
             >
@@ -36,7 +43,7 @@ export default function Home() {
             </Text>
             <Text
               fontWeight={'300'}
-              fontSize={'20px'}
+              fontSize={{ sm: '16px', md: '24px', lg: '20px' }}
               color={'fontPrimary'}
               lineHeight={'25px'}
             >
@@ -44,10 +51,10 @@ export default function Home() {
             </Text>
             <ButtonGroup
               gap={'30px'}
-              mt={'70px'}
+              mt={{ base:'50px',md:'70px' }}
             >
               <ButtonPrimary
-                width={'154px'}
+                width={{ base:'135px',md:'154px' }}
                 height={'34px'}
               >
                 Selengkapnya
@@ -55,7 +62,7 @@ export default function Home() {
 
               <ButtonSecondary
                 gap={'13px'}
-                width={'154px'}
+                width={{ base:'135px',md:'154px' }}
                 height={'34px'}
               >
                 <Image
@@ -69,11 +76,14 @@ export default function Home() {
               </ButtonSecondary>
             </ButtonGroup>
           </Box>
-          <Box>
+          <Box
+            width={'auto'}
+          >
             <Image
               src={'/images/banner1.png'}
               width={'524'}
               height={'547'}
+              className='img-home'
               alt='banner'
             />
           </Box>
@@ -81,7 +91,7 @@ export default function Home() {
         <Box
           width={'full'}
           textAlign={'right'}
-          pt={'24px'}
+          pt={{ base:'50px',lg:'24px' }}
         >
           <ButtonFloat />
         </Box>

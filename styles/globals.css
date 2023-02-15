@@ -16,3 +16,32 @@ body {
   font-weight: 600;
   font-size: 24px;
 }
+
+@media only screen and (min-width: 1200px) {
+  .img-home {
+    width: 524px;
+    height: 547px;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .img-home {
+    width: 500px;
+    height: auto;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .img-home {
+    width: 450px;
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .img-home {
+    width: auto;
+    height: 350px;
+    /* display: none; */
+  }
+}

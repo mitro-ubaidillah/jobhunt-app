@@ -1,12 +1,12 @@
 import { Stack } from '@chakra-ui/react';
 import React from 'react';
 
-const Layout = ({children}) => {
+const Layout = ({ children }) => {
     return (
         <Stack
             bg={'backgroundPrimary'}
-            px={'60px'}
-            py={'27px'}
+            px={{ base: '30px', md: '50px', lg: '60px' }}
+            py={{ base:'27px',md:'50px',lg:'27px' }}
         >
             {children}
         </Stack>
