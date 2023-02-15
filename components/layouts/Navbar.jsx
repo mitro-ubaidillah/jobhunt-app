@@ -6,9 +6,8 @@ import Image from 'next/image';
 const Navbar = () => {
     return (
         <Flex
-            py={'27px'}
-            px={'60px'}
             justify={'space-between'}
+            bg={'transparent'}
         >
             <Image src='/images/icons/logo.png' width={'200'} height={'100'} alt='logo'/>
             <ButtonSecondary>

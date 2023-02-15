@@ -1,7 +1,6 @@
 import { ButtonGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from '@chakra-ui/react';
 import React from 'react';
 import ButtonPrimary from '../buttons/ButtonPrimary';
-import ButtonSecondary from '../buttons/ButtonSecondary';
 import ButtonAlternative from '../buttons/ButtonAlternative';
 import Image from 'next/image';
 

@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react';
 import React from 'react';
 
-const ButtonSecondary = ({ children, type, onClick, width, height }) => {
+const ButtonSecondary = ({ children, type, onClick, width, height, gap }) => {
     return (
         <Button
             onClick={onClick}
@@ -17,6 +17,7 @@ const ButtonSecondary = ({ children, type, onClick, width, height }) => {
             borderRadius={'4px'}
             width={width}
             height={height}
+            gap={gap}
         >
             {children}
         </Button>
