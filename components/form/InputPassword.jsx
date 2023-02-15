@@ -33,9 +33,9 @@ const InputPassword = ({ onShowHide, errorsName, placeholder, errorsMessage, sho
                     >
                         {
                             show ?
-                                <VscEyeClosed />
-                                :
                                 <VscEye />
+                                :
+                                <VscEyeClosed />
                         }
                     </Button>
                 </InputRightElement>
