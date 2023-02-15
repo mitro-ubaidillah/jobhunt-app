@@ -2,12 +2,18 @@ import Head from 'next/head'
 import axios from 'axios'
 import ButtonSecondary from '../components/buttons/ButtonSecondary'
 import ButtonPrimary from '../components/buttons/ButtonPrimary'
-import { Button, ChakraProvider } from '@chakra-ui/react'
+import { Button, ChakraProvider, useDisclosure } from '@chakra-ui/react'
 import theme from '../utils/extendedTheme'
 import "@fontsource/nunito"
 import Navbar from '../components/layouts/Navbar'
+import SuccessAlert from '../components/alerts/SuccessAlert'
+import DeleteAlert from '../components/alerts/DeleteAlert'
+import ButtonGhost from '../components/buttons/ButtonGhost'
+import PopUpDialog from '../components/popups/PopUpDialog'
+import PopUpDialogNoClose from '../components/popups/PopUpDialogNoClose'
 
 export default function Home() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <ChakraProvider theme={theme}>
       <Head>
@@ -21,15 +27,26 @@ export default function Home() {
         <h1 className="text-4xl font-bold">Bioskop Abah</h1>
         <p className='text-2xl font-semibold'>Tonton Sekarang</p>
         <div className="grid grid-cols-3 gap-5">
-         <ButtonSecondary>
-          Halo
-         </ButtonSecondary>
-         <ButtonPrimary>
-          Halo Primary
-         </ButtonPrimary>
-         <Button>
-          Halo
-         </Button>
+          <ButtonSecondary>
+            Halo
+          </ButtonSecondary>
+          <ButtonPrimary>
+            Halo Primary
+          </ButtonPrimary>
+          <Button onClick={() => DeleteAlert('Data berhasil dihapus')}>
+            Halo
+          </Button>
+          <ButtonGhost onClick={onOpen}>
+            Halo
+          </ButtonGhost>
+          <PopUpDialogNoClose
+            title={'Anda yakin ingin menghapus data ini?'}
+            body={'Data yang di hapus akan hilang dan tidak dapat di akses kembali'}
+            isOpen={isOpen}
+            onClose={onClose}
+            titleButtonCancel={'Cancel'}
+            titleButtonConfirm={'Confirm'}
+          />
         </div>
       </main>
       <footer></footer>

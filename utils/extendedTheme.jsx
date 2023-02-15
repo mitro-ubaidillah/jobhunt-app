@@ -5,6 +5,7 @@ const theme = extendTheme({
         primary: "#128ECC",
         secondary: "#CEECFA",
         primaryHover: "#107bb0",
+        fontPrimary: "#414141"
     },
     fonts: {
         heading: `'Nunito', sans-serif`,
