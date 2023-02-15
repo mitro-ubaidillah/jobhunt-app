@@ -17,6 +17,10 @@ body {
   font-size: 24px;
 }
 
+.link {
+  color: #128ECC;
+}
+
 @media only screen and (min-width: 1200px) {
   .img-home {
     width: 524px;
@@ -35,13 +39,5 @@ body {
   .img-home {
     width: 450px;
     height: auto;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .img-home {
-    width: auto;
-    height: 350px;
-    /* display: none; */
   }
 }
