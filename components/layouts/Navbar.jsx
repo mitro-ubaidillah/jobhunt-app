@@ -1,16 +1,23 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import React from 'react';
 import ButtonSecondary from '../buttons/ButtonSecondary';
+import Image from 'next/image';
 
-const Navbar = () => {
+const Navbar = ({ onLogin, onClickLogo }) => {
     return (
         <Flex
-            py={'27px'}
-            px={'60px'}
             justify={'space-between'}
+            bg={'transparent'}
         >
-            <Image src='/images/icons/logo.png' />
-            <ButtonSecondary>
+            <Box
+                onClick={onClickLogo}
+                cursor={'pointer'}
+            >
+                <Image src='/images/icons/logo.png' width={'200'} height={'100'} alt='logo' />
+            </Box>
+            <ButtonSecondary
+                onClick={onLogin}
+            >
                 Masuk
             </ButtonSecondary>
         </Flex>
