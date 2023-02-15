@@ -14,26 +14,29 @@ const Index = () => {
             flexWrap={'wrap'}
             justify={'center'}
             align={'center'}
+            bg={'white'}
         >
             <Box
-                flexBasis={'50%'}
+                flexBasis={{ base:'100%',md:'50%',lg:'50%' }}
                 bgImage={`url(/images/login-image.png)`}
                 bgRepeat={'no-repeat'}
                 bgSize={'cover'}
-                height={'100vh'}
+                height={{ base:'30vh',md:'100vh' }}
                 maxHeight={'100vh'}
                 position={'relative'}
             >
                 <Box
                     position={'absolute'}
-                    bottom={'60px'}
-                    left={'120px'}
+                    bottom={{ base:'150px',md:'60px' }}
+                    left={{ base:'60px',md:'80px',lg:'120px' }}
                 >
-                    <Image src={'/images/icons/logo.png'} width={'400'} height={'82'} alt='logo' />
+                    <Image src={'/images/icons/logo.png'} width={'400'} height={'82'} alt='logo' className='img-login'/>
                 </Box>
             </Box>
             <Box
-                flexBasis={'50%'}
+                flexBasis={{ base:'90%',md:'50%' }}
+                py={{ base:'20',md:'0' }}
+                px={{ base:'10', md:'0' }}
                 textAlign={'center'}
             >
                 <Text
@@ -51,7 +54,7 @@ const Index = () => {
                     Silahkan masukkan data di bawah ini
                 </Text>
                 <Box
-                    width={'452px'}
+                    width={{ base:'300px',md:'330px',lg:'452px' }}
                     mx={'auto'}
                     mt={'30px'}
                     mb={'60px'}
@@ -67,7 +70,7 @@ const Index = () => {
                     />
                 </Box>
                 <ButtonPrimary
-                    width={'452px'}
+                    width={{ base:'300px',md:'330px',lg:'452px' }}
                 >
                     Masuk
                 </ButtonPrimary>
