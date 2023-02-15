@@ -1,7 +1,7 @@
 import { FormControl, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react';
 import React from 'react';
 
-const InputField = ({ type, label, register, errorsName, errorsMessage }) => {
+const InputField = ({ type, label, register, errorsName, errorsMessage, placeholder }) => {
     return (
         <FormControl
             isInvalid={errorsName}
@@ -22,6 +22,7 @@ const InputField = ({ type, label, register, errorsName, errorsMessage }) => {
                 height={'38px'}
                 borderRadius={'4px'}
                 color={'fontPrimary'}
+                placeholder={placeholder}
                 {...register}
             />
             {errorsName && (
