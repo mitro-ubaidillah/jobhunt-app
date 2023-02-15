@@ -1,10 +1,10 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import InputField from '../../components/form/InputField';
+import InputPassword from '../../components/form/InputPassword';
 import ButtonPrimary from '../../components/buttons/ButtonPrimary';
 import Link from 'next/link';
-import InputPassword from '../../components/form/InputPassword';
 
 const Index = () => {
     const [show, setShow] = useState(false);
@@ -18,7 +18,7 @@ const Index = () => {
         >
             <Box
                 flexBasis={{ base:'100%',md:'50%',lg:'50%' }}
-                bgImage={`url(/images/login-image.png)`}
+                bgImage={`url(/images/register-image.png)`}
                 bgRepeat={'no-repeat'}
                 bgSize={'cover'}
                 height={{ base:'30vh',md:'100vh' }}
@@ -34,7 +34,7 @@ const Index = () => {
                 </Box>
             </Box>
             <Box
-                flexBasis={{ base:'100%',md:'50%' }}
+                flexBasis={{ base:'90%',md:'50%' }}
                 py={{ base:'20',md:'0' }}
                 px={{ base:'10', md:'0' }}
                 textAlign={'center'}
@@ -44,14 +44,14 @@ const Index = () => {
                     fontSize={'24px'}
                     fontWeight={'600'}
                 >
-                    Halo!
+                    Selamat Datang
                 </Text>
                 <Text
                     color={'#41414199'}
                     fontSize={'16px'}
                     fontWeight={'400'}
                 >
-                    Silahkan masukkan data di bawah ini
+                    Mulai perjalanan karirmu bersama JobHunt.id
                 </Text>
                 <Box
                     width={{ base:'300px',md:'330px',lg:'452px' }}
@@ -60,10 +60,14 @@ const Index = () => {
                     mb={'60px'}
                 >
                     <InputField
+                        placeholder={'Username'}
+                        type={'text'}
+                    />
+                    <InputField
                         placeholder={'Email'}
                         type={'email'}
                     />
-                    <InputPassword 
+                    <InputPassword
                         placeholder={'Password'}
                         onShowHide={()=>handleShowHide()}
                         show={show}
@@ -72,7 +76,7 @@ const Index = () => {
                 <ButtonPrimary
                     width={{ base:'300px',md:'330px',lg:'452px' }}
                 >
-                    Masuk
+                    Daftar
                 </ButtonPrimary>
                 <Box
                     mt={'32px'}
@@ -82,7 +86,7 @@ const Index = () => {
                         fontWeight={'400'}
                         color={'#4C4C4CE5'}
                     >
-                        Belum punya akun? <Link href={'/register'} className='link'>Daftar Sekarang</Link>
+                        Sudah punya akun? <Link href={'/login'} className='link'>Masuk Sekarang</Link>
                     </Text>
                 </Box>
             </Box>
