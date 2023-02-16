@@ -1,31 +1,35 @@
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputField from '../../components/form/InputField';
 import InputPassword from '../../components/form/InputPassword';
 import ButtonPrimary from '../../components/buttons/ButtonPrimary';
 import Link from 'next/link';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterValidation } from '../../utils/validations/RegisterValidation';
-import Cookies from 'js-cookie';
 import SuccessAlert from '../../components/alerts/SuccessAlert';
 import FailedAlert from '../../components/alerts/FailedAlert';
+import { api } from '../../service/api';
+import { Auth } from '../../utils/Auth/Auth';
+import { useRouter } from 'next/router';
 
 const Index = () => {
     const [show, setShow] = useState(false);
     const handleShowHide = () => { setShow(!show) }
+    const auth = Auth();
+    const router = useRouter();
 
     const onHandlerRegister = async ({ Username, Email, Password }) => {
-        await axios.post(`https://klinikme-test-api.herokuapp.com/api/v1/data_user/daftar `, { Username, Email, Password })
-            .then(response => {
-                Cookies('set', response.data.token);
+        await api.register({ Username, Email, Password })
+            .then(() => {
                 SuccessAlert('Pendafataran berhasil');
+                router('/login')
             })
             .catch(error => {
                 FailedAlert(error.response.data?.message)
             })
+
     }
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -36,6 +40,12 @@ const Index = () => {
     const onRegister = (data) => {
         onHandlerRegister(data);
     }
+
+    useEffect(() => {
+        if(auth) {
+            router.push('/pegawai')
+        }
+    },[])
 
     return (
         <Flex

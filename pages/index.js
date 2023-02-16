@@ -19,7 +19,7 @@ export default function Home() {
       </Head>
       <Layout>
         <Navbar 
-          onLogin={()=>router.push('/login')}
+          onClick={()=>router.push('/login')}
           onClickLogo={()=>router.push('/')}
         />
         <Flex

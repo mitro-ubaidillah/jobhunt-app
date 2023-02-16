@@ -3,7 +3,7 @@ import React from 'react';
 import ButtonPrimary from '../buttons/ButtonPrimary';
 import ButtonSecondary from '../buttons/ButtonSecondary';
 
-const PopUpDialogNoClose = ({ isOpen, onClose, title, body, onClickConfirm, titleButtonCancel, titleButtonConfirm }) => {
+const DeleteDialog = ({ isOpen, onClose, onClickConfirm }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -20,8 +20,8 @@ const PopUpDialogNoClose = ({ isOpen, onClose, title, body, onClickConfirm, titl
                     maxWidth={'256px'}
                     mb={'12px'}
                     p={0}
-                    >
-                    {title}
+                >
+                    Anda yakin ingin menghapus data ini?
                 </ModalHeader>
                 <ModalBody
                     p={0}
@@ -32,7 +32,7 @@ const PopUpDialogNoClose = ({ isOpen, onClose, title, body, onClickConfirm, titl
                     lineHeight={'19px'}
                     maxWidth={'340px'}
                 >
-                    {body}
+                    Data yang di hapus akan hilang dan tidak dapat di akses kembali
                 </ModalBody>
 
                 <ModalFooter>
@@ -44,15 +44,15 @@ const PopUpDialogNoClose = ({ isOpen, onClose, title, body, onClickConfirm, titl
                             onClick={onClose}
                             width={'172px'}
                             height={'38px'}
-                            >
-                            {titleButtonCancel}
+                        >
+                            Batal
                         </ButtonSecondary>
                         <ButtonPrimary
                             height={'38px'}
                             width={'172px'}
                             onClick={onClickConfirm}
                         >
-                            {titleButtonConfirm}
+                            Hapus data
                         </ButtonPrimary>
                     </ButtonGroup>
                 </ModalFooter>
@@ -61,4 +61,4 @@ const PopUpDialogNoClose = ({ isOpen, onClose, title, body, onClickConfirm, titl
     );
 }
 
-export default PopUpDialogNoClose;
+export default DeleteDialog;

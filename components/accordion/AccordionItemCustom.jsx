@@ -4,7 +4,12 @@ import React from 'react';
 
 const AccordionItemCustom = ({ title, body }) => {
     return (
-        <AccordionItem>
+        <AccordionItem
+            borderBottom={'1px'}
+            p={'10px'}
+            borderTop={'none'}
+            borderColor={'#EBE8E8'}
+        >
             {({ isExpanded }) => (
                 <>
                     <h2>
@@ -25,7 +30,7 @@ const AccordionItemCustom = ({ title, body }) => {
                             )}
                         </AccordionButton>
                     </h2>
-                    <AccordionPanel pb={4}>
+                    <AccordionPanel pb={4} borderTop={'1px'} borderColor={'#EBE8E8'} pt={'30px'} pl={0}>
                         {body}
                     </AccordionPanel>
                 </>

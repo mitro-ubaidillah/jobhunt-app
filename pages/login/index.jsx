@@ -1,29 +1,33 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputField from '../../components/form/InputField';
 import ButtonPrimary from '../../components/buttons/ButtonPrimary';
 import Link from 'next/link';
 import InputPassword from '../../components/form/InputPassword';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidation } from '../../utils/validations/LoginValidation';
 import Cookies from 'js-cookie';
 import SuccessAlert from '../../components/alerts/SuccessAlert';
+import FailedAlert from '../../components/alerts/FailedAlert';
+import { api } from '../../service/api';
+import { Auth } from '../../utils/Auth/Auth';
+import { useRouter } from 'next/router';
 
 const Index = () => {
     const [show, setShow] = useState(false);
     const handleShowHide = () => { setShow(!show) }
+    const auth = Auth();
+    const router = useRouter();
 
     const onHandlerLogin = async ({ Email, Password }) => {
-        await axios.post(`https://klinikme-test-api.herokuapp.com/api/v1/data_user/masuk`, { Email, Password })
+        await api.login({ Email, Password })
             .then(response => {
                 Cookies.set('token', response.data.token);
                 SuccessAlert('Login berhasil')
             })
-            .catch(error => {
-                // console.log(error)
+            .catch(() => {
                 FailedAlert('Password atau email salah')
             })
     }
@@ -31,12 +35,17 @@ const Index = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'onSubmit',
         resolver: yupResolver(LoginValidation),
-        // defaultValues: initialValue
     });
 
     const onLogin = (data) => {
         onHandlerLogin(data);
     }
+
+    useEffect(() => {
+        if(auth) {
+            router.push('/pegawai')
+        }
+    },[])
 
     return (
         <Flex
