@@ -19,7 +19,7 @@ export default function Home() {
       </Head>
       <Layout>
         <Navbar 
-          onClick={()=>router.push('/login')}
+          onLogin={()=>router.push('/login')}
           onClickLogo={()=>router.push('/')}
         />
         <Flex
@@ -100,12 +100,3 @@ export default function Home() {
   )
 }
 
-// export async function getServerSideProps() {
-//   // const result = await axios.get('https://api.themoviedb.org/3/movie/now_playing?api_key=4cee0d1f3d660d8d420266c93e1f1e5d&language=en-US&page=1');
-//   // // const data = result.data.results
-//   // return {
-//   //   props: {
-//   //     movies: data
-//   //   }
-//   // }
-// }
