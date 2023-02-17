@@ -52,6 +52,7 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
 
     const onLogout = () => {
         onLogoutHandler();
+        router.push('/login')
     }
 
     const onChangeBorn = (e) => {
