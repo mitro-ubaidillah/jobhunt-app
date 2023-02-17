@@ -3,11 +3,16 @@ import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPane
 import React from 'react';
 import AccordionItemCustom from './AccordionItemCustom';
 
-const AccordionForm = () => {
+const AccordionForm = ({ children, width }) => {
     return (
-        <Accordion allowMultiple>
-            <AccordionItemCustom />
-            <AccordionItemCustom />
+        <Accordion
+            allowToggle
+            bg={'backgroundPrimary'}
+            borderColor={'transparent'}
+            border={'none'}
+            width={width}
+        >
+            {children}
         </Accordion>
     );
 }

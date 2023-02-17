@@ -4,11 +4,11 @@ import ButtonPrimary from '../buttons/ButtonPrimary';
 import ButtonAlternative from '../buttons/ButtonAlternative';
 import Image from 'next/image';
 
-const PopUpDialog = ({ isOpen, onClose, title, body, onClickConfirm, titleButtonCancel, titleButtonConfirm }) => {
+const PopUpDialog = ({ isOpen, onClose, title, body, onClickConfirm, onClickDelete }) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent width={'610px'}>
                 <ModalHeader
                     fontWeight={'500'}
                     fontSize={'16px'}
@@ -27,16 +27,16 @@ const PopUpDialog = ({ isOpen, onClose, title, body, onClickConfirm, titleButton
                         width={'full'}
                     >
                         <ButtonAlternative
-                            onClick={onClose}
+                            onClick={onClickDelete}
                         >
-                            <Image src={'/images/icons/delete-icon.png'} height='18' width='18' alt='trash-icon'/>
-                            <Text pt={'4px'}>{titleButtonCancel}</Text>
+                            <Image src={'/images/icons/delete-icon.png'} height='18' width='18' alt='trash-icon' />
+                            <Text pt={'4px'}>Hapus</Text>
                         </ButtonAlternative>
                         <ButtonPrimary
                             width={'121px'}
                             onClick={onClickConfirm}
                         >
-                            {titleButtonConfirm}
+                            Simpan
                         </ButtonPrimary>
                     </ButtonGroup>
                 </ModalFooter>

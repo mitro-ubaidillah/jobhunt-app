@@ -1,7 +1,7 @@
 import { FormControl, FormErrorMessage, FormLabel, Select } from '@chakra-ui/react';
 import React from 'react';
 
-const SelectInput = ({ errorsMessage, label, errorsName, register }) => {
+const SelectInput = ({ errorsMessage, label, errorsName, register, children, onChange, placeholder }) => {
     return (
         <FormControl
             isInvalid={errorsName}
@@ -14,9 +14,8 @@ const SelectInput = ({ errorsMessage, label, errorsName, register }) => {
             >
                 {label}
             </FormLabel>
-            <Select placeholder='' {...register}>
-                <option value="">1</option>
-                <option value="">2</option>
+            <Select placeholder={placeholder} {...register} onChange={onChange}>
+                {children}
             </Select>
             {errorsName && (
                 <FormErrorMessage>
