@@ -61,5 +61,15 @@ export const api = {
                 'content-type': 'multipart/form-data'
             },
             data: data
+        }),
+    addDataPegawai: (token, data) => 
+        instance({
+            method: `POST`,
+            url: `daftar_pegawai`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            },
+            data: data
         })
 }

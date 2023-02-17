@@ -64,7 +64,36 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         setAge(newAge);
     }
 
-    const onSubmit = (data) => console.log(data);
+    //handle upload data pegawai
+    const onHandleDataPegawai = async(data) => {
+        await axios.post(`https://klinikme-test-api.herokuapp.com/api/v1/daftar_pegawai`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const onSubmit = (data) => {
+        // console.log(data)
+        const formData = new FormData()
+        formData.append('NamaLengkap', data.NamaLengkap)
+        formData.append('AlamatLengkap', data.AlamatLengkap);
+        formData.append('Umur', data.Umur);
+        formData.append('TanggalLahir', data.TanggalLahir);
+        formData.append('Kd_Provinsi', data.Kd_Provinsi);
+        formData.append('Kd_Kota', data.Kd_Kota);
+        formData.append('RiwayatPendidikan', JSON.stringify(riwayat));
+        formData.append('Sertifikasi', JSON.stringify(sertifikasi));
+        
+        console.log(formData.get('RiwayatPendidikan'));
+    };
 
     //validation Personal Data
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
