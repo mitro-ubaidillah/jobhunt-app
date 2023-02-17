@@ -26,6 +26,8 @@ import { addSertifikat, destroySertifikat, editSertifikat } from '../../redux/sl
 import Image from 'next/image';
 import SuccessAlert from '../../components/alerts/SuccessAlert';
 import FailedAlert from '../../components/alerts/FailedAlert';
+import { DataPendidikan } from '../../utils/validations/DataPendidikan';
+import { addPendidikan } from '../../redux/slice/PendidikanSlice';
 
 const Index = ({ provinsi, kota, pendidikan, bidang }) => {
     const auth = Auth();
@@ -40,6 +42,7 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
     const token = Cookies.get('token');
     const dispatch = useDispatch();
     const sertifikasi = useSelector((state) => state.sertifikasi);
+    const riwayat = useSelector((state) => state.pendidikan);
 
     const { isOpen: isOpenRiwayat, onOpen: onOpenRiwayat, onClose: onCloseRiwayat } = useDisclosure()
     const { isOpen: isOpenDeleteDialog, onOpen: onOpenDeleteDialog, onClose: onCloseDeleteDialog } = useDisclosure()
@@ -61,6 +64,8 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         setAge(newAge);
     }
 
+    const onSubmit = (data) => console.log(data);
+
     //validation Personal Data
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: 'onTouched',
@@ -73,11 +78,17 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         resolver: yupResolver(SertivikasiValidation)
     });
 
-    const onSubmit = (data) => { console.log(data) }
+    //validation data pendidikan
+    const {register: onAddPendidikan, handleSubmit: onSubmitPendidikan, formState: {errors: errorsPendidikan}, setValue: setPendidikan} = useForm({
+        mode: 'all',
+        resolver: yupResolver(DataPendidikan)
+    })
 
     const newKota = kota?.filter((data) => {
         return data.Kd_Provinsi == prov;
     });
+
+    //handle sertifikat
 
     const onHandlePreviewImage = (file) => {
         setImageSertifikat(file);
@@ -110,7 +121,6 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
                 SuccessAlert('Data berhasil di simpan')
                 setPreviewImage(null);
                 setImageSertifikat('');
-                onCloseSertifikasi();
             })
             .catch(error => {
                 FailedAlert('Data gagal di simpan')
@@ -149,6 +159,7 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         setSertifikasi('NamaLembaga', '');
         setSertifikasi('Id_Bidang', '');
         setSertifikasi('DokumenSertifikat', '');
+        onCloseSertifikasi();
     }
 
     const onHandleUpdateSertifikasi = (data) => {
@@ -188,7 +199,31 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         onCloseEditSertifikasi()
     }
 
-    console.log(sertifikasi)
+    //handle pendidikan
+    const onHandleDataPendidikan = (data) => {
+        dispatch(addPendidikan({
+            Kd_Pendidikan: data.Kd_Pendidikan,
+            NamaSekolah: data.NamaSekolah,
+            TanggalMulai: data.TanggalMulai,
+            TanggalSelesai: data.TanggalSelesai,
+        }));
+        setPendidikan('Kd_Pendidikan', '');
+        setPendidikan('NamaSekolah', '');
+        setPendidikan('TanggalMulai', '');
+        setPendidikan('TanggalSelesai', '');
+        SuccessAlert('Data berhasil disimpan')
+        onCloseRiwayat();
+    }
+
+    const onCloseDialogRiwayat = () => {
+        setPendidikan('Kd_Pendidikan', '');
+        setPendidikan('NamaSekolah', '');
+        setPendidikan('TanggalMulai', '');
+        setPendidikan('TanggalSelesai', '');
+        onCloseRiwayat();
+    }
+
+    console.log(riwayat)
 
     useEffect(() => {
         if (!auth) {
@@ -236,6 +271,51 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
                                 >
                                     Tambah riwayat pendidikan
                                 </ButtonAdd>
+                                {
+                                    riwayat?.map((data) => (
+                                        pendidikan.map((item) => (
+                                            data.Kd_Pendidikan == item.Kd_Pendidikan &&
+                                            <>
+                                                <Flex
+                                                    justify={'space-between'}
+                                                    align={'center'}
+                                                    my={'24px'}
+                                                    key={item.id}
+                                                >
+                                                    <Box>
+                                                        <Text
+                                                            fontWeight={'500'}
+                                                            fontSize={'18px'}
+                                                            color={'fontPrimary'}
+                                                        >
+                                                            {data.NamaSekolah}
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight={'300'}
+                                                            fontSize={'16px'}
+                                                            color={'fontPrimary'}
+                                                        >
+                                                            {item.Pendidikan}
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight={'300'}
+                                                            fontSize={'14px'}
+                                                            color={'fontPrimary'}
+                                                        >
+                                                            {`${data.TanggalMulai} - ${data.TanggalSelesai}`}
+                                                        </Text>
+                                                    </Box>
+                                                    <Box
+                                                        cursor={'pointer'}
+                                                        onClick={() => onEditSertifikat(item.id)}
+                                                    >
+                                                        <Image src={'/images/icons/edit.png'} width={'24'} height={'24'} alt='edit icon' />
+                                                    </Box>
+                                                </Flex>
+                                            </>
+                                        ))
+                                    ))
+                                }
                             </Box>
                         }
                     />
@@ -310,10 +390,21 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
             {/* dialog box riwayat pendidikan */}
             <FormRiwayatPendidikan
                 isOpen={isOpenRiwayat}
-                onClose={onCloseRiwayat}
+                onClose={()=>onCloseDialogRiwayat()}
                 jenjang={pendidikan}
                 onClickDelete={onOpenDeleteDialog}
+                errorsJenjang={errorsPendidikan.Kd_Pendidikan}
+                errorsNamaSekolah={errorsPendidikan.NamaSekolah}
+                errorsTanggalMulai={errorsPendidikan.TanggalMulai}
+                errorsTanggalSelesai={errorsPendidikan.TanggalSelesai}
+                registerJenjang={onAddPendidikan('Kd_Pendidikan')}
+                registerNamaSekolah={onAddPendidikan('NamaSekolah')}
+                registerTanggalMulai={onAddPendidikan('TanggalMulai')}
+                registerTanggalSelesai={onAddPendidikan('TanggalSelesai')}
+                onClickConfirm={onSubmitPendidikan(onHandleDataPendidikan)}
             />
+
+
             <DeleteDialog
                 isOpen={isOpenDeleteDialog}
                 onClose={onCloseDeleteDialog}

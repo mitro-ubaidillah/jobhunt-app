@@ -4,7 +4,12 @@ import PopUpDialog from '../popups/PopUpDialog';
 import { Box } from '@chakra-ui/react';
 import SelectInput from './SelectInput';
 
-const FormRiwayatPendidikan = ({ onClose, isOpen, onClickConfirm, jenjang, onClickDelete }) => {
+const FormRiwayatPendidikan = (
+    {
+        onClose, isOpen, onClickConfirm, jenjang, onClickDelete, registerJenjang, registerNamaSekolah, registerTanggalMulai,
+        registerTanggalSelesai, errorsJenjang, errorsNamaSekolah, errorsTanggalMulai, errorsTanggalSelesai
+    }
+) => {
     return (
         <PopUpDialog
             title={'Riwayat Pendidikan'}
@@ -17,6 +22,9 @@ const FormRiwayatPendidikan = ({ onClose, isOpen, onClickConfirm, jenjang, onCli
                     <SelectInput
                         label={'Jenjang'}
                         placeholder={'Pilih Jenjang Pendidikan'}
+                        register={registerJenjang}
+                        errorsName={errorsJenjang}
+                        errorsMessage={errorsJenjang?.message}
                     >
                         {
                             jenjang?.map((data) => (
@@ -24,17 +32,26 @@ const FormRiwayatPendidikan = ({ onClose, isOpen, onClickConfirm, jenjang, onCli
                             ))
                         }
                     </SelectInput>
-                    <InputField 
+                    <InputField
                         label={'Nama Sekolah'}
                         type={'text'}
+                        register={registerNamaSekolah}
+                        errorsName={errorsNamaSekolah}
+                        errorsMessage={errorsNamaSekolah?.message}
                     />
-                    <InputField 
+                    <InputField
                         label={'Tgl. Mulai'}
                         type={'date'}
+                        register={registerTanggalMulai}
+                        errorsName={errorsTanggalMulai}
+                        errorsMessage={errorsTanggalMulai?.message}
                     />
-                    <InputField 
+                    <InputField
                         label={'Tgl. Selesai'}
                         type={'date'}
+                        register={registerTanggalSelesai}
+                        errorsName={errorsTanggalSelesai}
+                        errorsMessage={errorsTanggalSelesai?.message}
                     />
                 </Box>
             }
