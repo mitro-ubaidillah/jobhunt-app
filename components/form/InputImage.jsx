@@ -1,11 +1,11 @@
-import { Box, Center, FormControl, FormLabel, Grid, Input, Text } from '@chakra-ui/react';
+import { Box, Center, FormControl, FormErrorMessage, FormLabel, Grid, Image, Input, Text } from '@chakra-ui/react';
 import React from 'react';
 import ButtonSecondary from '../buttons/ButtonSecondary';
-import Image from 'next/image';
+// import Image from 'next/image';
 
-const InputImage = ({ previewImage, onRemoveImage, onChangeImage }) => {
+const InputImage = ({ previewImage, onRemoveImage, onChangeImage, register, errorsName, errorsMessage }) => {
     return (
-        <FormControl>
+        <FormControl isInvalid={errorsName}>
             <FormLabel
                 fontSize={'14px'}
                 fontWeight={'300'}
@@ -34,6 +34,8 @@ const InputImage = ({ previewImage, onRemoveImage, onChangeImage }) => {
                 accept="image/*"
                 display={'none'}
                 onChange={onChangeImage}
+                {...register}
+                required
             />
             <Box
                 py={'18px'}
@@ -82,6 +84,11 @@ const InputImage = ({ previewImage, onRemoveImage, onChangeImage }) => {
                     </FormLabel>
                 </FormControl>
             </Box>
+            {errorsName && (
+                <FormErrorMessage>
+                    {errorsMessage}
+                </FormErrorMessage>
+            )}
         </FormControl>
     );
 }

@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import jwtDecode from "jwt-decode";
 
 export const Auth = () => {
-    const token = Cookies.get('token');
-    if (token == undefined) {
+    const token = Cookies.get('token') ? Cookies.get('token') : false;
+    if (token == false) {
         return false;
     }
     try {

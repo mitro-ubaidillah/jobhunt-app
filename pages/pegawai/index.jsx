@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { onLogoutHandler } from '../../utils/Auth/Logout';
 import { Auth } from '../../utils/Auth/Auth';
 import { useRouter } from 'next/router';
-import { Box, Stack, Text } from '@chakra-ui/layout';
+import { Box, Stack, Text, Flex } from '@chakra-ui/layout';
 import AccordionForm from '../../components/accordion/AccordionForm';
 import AccordionItemCustom from '../../components/accordion/AccordionItemCustom';
 import FormPersonal from '../../components/form/FormPersonal';
@@ -16,9 +16,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { DataPegawaiValidation } from '../../utils/validations/DataPegawaiValidation';
 import ButtonAdd from '../../components/buttons/ButtonAdd';
 import FormRiwayatPendidikan from '../../components/form/FormRiwayatPendidikan';
-import { useDisclosure } from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import DeleteDialog from '../../components/popups/DeleteDialog';
 import FormSertifikasi from '../../components/form/FormSertifikasi';
+import axios from 'axios';
+import { SertivikasiValidation } from '../../utils/validations/SertifikasiValidation';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSertifikat, destroySertifikat, editSertifikat } from '../../redux/slice/SertifikasiSlice';
+import Image from 'next/image';
+import SuccessAlert from '../../components/alerts/SuccessAlert';
+import FailedAlert from '../../components/alerts/FailedAlert';
 
 const Index = ({ provinsi, kota, pendidikan, bidang }) => {
     const auth = Auth();
@@ -27,12 +34,18 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
     const [birth, setBirth] = useState();
     const [age, setAge] = useState('0');
     const [previewImage, setPreviewImage] = useState();
-    const [imageSertifikat, setImageSertifikat] = useState();
+    const [imageSertifikat, setImageSertifikat] = useState('');
+    const [requiredImage, setRequiredImage] = useState(true);
+    const [idSertifikasi, setIdSertifikasi] = useState();
+    const token = Cookies.get('token');
+    const dispatch = useDispatch();
+    const sertifikasi = useSelector((state) => state.sertifikasi);
 
     const { isOpen: isOpenRiwayat, onOpen: onOpenRiwayat, onClose: onCloseRiwayat } = useDisclosure()
     const { isOpen: isOpenDeleteDialog, onOpen: onOpenDeleteDialog, onClose: onCloseDeleteDialog } = useDisclosure()
 
     const { isOpen: isOpenSertifikasi, onOpen: onOpenSertifikasi, onClose: onCloseSertifikasi } = useDisclosure()
+    const { isOpen: isOpenEditSertifikasi, onOpen: onOpenEditSertifikasi, onClose: onCloseEditSertifikasi } = useDisclosure()
 
     const onLogout = () => {
         onLogoutHandler();
@@ -48,10 +61,17 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         setAge(newAge);
     }
 
+    //validation Personal Data
     const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         mode: 'onTouched',
         resolver: yupResolver(DataPegawaiValidation)
     })
+
+    //validation Data sertifikasi
+    const { register: onAddSertifikasi, handleSubmit: onSubmitSertifikasi, formState: { errors: errorsSertifikasi }, setValue: setSertifikasi } = useForm({
+        mode: 'all',
+        resolver: yupResolver(SertivikasiValidation)
+    });
 
     const onSubmit = (data) => { console.log(data) }
 
@@ -61,6 +81,7 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
 
     const onHandlePreviewImage = (file) => {
         setImageSertifikat(file);
+        setRequiredImage(false)
         const reader = new FileReader();
         reader.onload = () => {
             setPreviewImage(reader.result);
@@ -68,11 +89,112 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
         reader.readAsDataURL(file);
     }
 
+    const onHandleUploadImage = async (NamaLembaga, Id_Bidang) => {
+        const data = new FormData();
+        data.append('image', imageSertifikat);
+
+        await axios.post('https://klinikme-test-api.herokuapp.com/api/v1/upload_image', data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                const linkImage = response.data.data.linkImage;
+                setSertifikasi('DokumenSertifikat', linkImage)
+                dispatch(addSertifikat({
+                    NamaLembaga: NamaLembaga,
+                    Id_Bidang: Id_Bidang,
+                    DokumenSertifikat: linkImage
+                }));
+                SuccessAlert('Data berhasil di simpan')
+                setPreviewImage(null);
+                setImageSertifikat('');
+                onCloseSertifikasi();
+            })
+            .catch(error => {
+                FailedAlert('Data gagal di simpan')
+            })
+    }
+
+    const onUpdateImage = async (NamaLembaga, Id_Bidang) => {
+        const data = new FormData();
+        data.append('image', imageSertifikat);
+
+        await axios.post('https://klinikme-test-api.herokuapp.com/api/v1/upload_image', data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+                const linkImage = response.data.data.linkImage;
+                setSertifikasi('DokumenSertifikat', linkImage)
+                dispatch(editSertifikat({
+                    NamaLembaga: NamaLembaga,
+                    Id_Bidang: Id_Bidang,
+                    DokumenSertifikat: linkImage
+                }));
+                SuccessAlert('Data berhasil di simpan')
+                setPreviewImage(null);
+                setImageSertifikat('');
+            })
+            .catch(error => {
+                FailedAlert('Data gagal di simpan')
+            })
+    }
+
+    const onHandleSertifikasi = (data) => {
+        onHandleUploadImage(data.NamaLembaga, data.Id_Bidang)
+        setSertifikasi('NamaLembaga', '');
+        setSertifikasi('Id_Bidang', '');
+        setSertifikasi('DokumenSertifikat', '');
+    }
+
+    const onHandleUpdateSertifikasi = (data) => {
+        onUpdateImage(data.NamaLembaga, data.Id_Bidang);
+    }
+
+    const onEditSertifikat = (id) => {
+        sertifikasi?.map((data) => {
+            data.id == id &&
+            setSertifikasi('NamaLembaga', data.NamaLembaga);
+            setSertifikasi('Id_Bidang', data.Id_Bidang);
+            setSertifikasi('DokumenSertifikat', data.DokumenSertifikat);
+            setPreviewImage(data.DokumenSertifikat);
+        })
+        setIdSertifikasi(id);
+        onOpenEditSertifikasi();
+    }
+
+    const onRemoveImage = () => {
+        setPreviewImage(null);
+        setImageSertifikat('');
+        setRequiredImage(false)
+    }
+
+    const onCloseDialogSertifikat = () => {
+        setSertifikasi('NamaLembaga', '')
+        setSertifikasi('Id_Bidang', '')
+        setSertifikasi('DokumenSertifikat', '')
+        setPreviewImage('');
+        setImageSertifikat('');
+        onCloseSertifikasi()
+        onCloseEditSertifikasi()
+    }
+
+    const onDeleteSertifikat = () => {
+        dispatch(destroySertifikat({id: idSertifikasi}))
+        onCloseEditSertifikasi()
+    }
+
+    console.log(sertifikasi)
+
     useEffect(() => {
         if (!auth) {
             router.push('/login')
         }
-    }, []);
+    }, [requiredImage, auth]);
 
     return (
         <Layout>
@@ -128,6 +250,46 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
                                 >
                                     Tambah sertifikasi
                                 </ButtonAdd>
+                                {
+                                    sertifikasi?.map((item) =>
+                                    (
+                                        bidang?.map((data) =>
+                                        (
+                                            data.Id_Bidang == item.Id_Bidang &&
+                                            <>
+                                                <Flex
+                                                    justify={'space-between'}
+                                                    align={'center'}
+                                                    my={'24px'}
+                                                    key={item.id}
+                                                >
+                                                    <Box>
+                                                        <Text
+                                                            fontWeight={'500'}
+                                                            fontSize={'18px'}
+                                                            color={'fontPrimary'}
+                                                        >
+                                                            {item.NamaLembaga}
+                                                        </Text>
+                                                        <Text
+                                                            fontWeight={'300'}
+                                                            fontSize={'16px'}
+                                                            color={'fontPrimary'}
+                                                        >
+                                                            {data.NamaBidang}
+                                                        </Text>
+                                                    </Box>
+                                                    <Box
+                                                        cursor={'pointer'}
+                                                        onClick={() => onEditSertifikat(item.id)}
+                                                    >
+                                                        <Image src={'/images/icons/edit.png'} width={'24'} height={'24'} alt='edit icon' />
+                                                    </Box>
+                                                </Flex>
+                                            </>
+                                        ))
+                                    ))
+                                }
                             </Box>
                         }
                     />
@@ -160,11 +322,34 @@ const Index = ({ provinsi, kota, pendidikan, bidang }) => {
             {/* dialog box sertifikasi */}
             <FormSertifikasi
                 isOpen={isOpenSertifikasi}
-                onClose={onCloseSertifikasi}
+                onClose={onCloseDialogSertifikat}
                 bidang={bidang}
                 previewImage={previewImage}
                 onChangeImage={(e) => onHandlePreviewImage(e.target.files[0])}
-                onRemoveImage={()=>setPreviewImage(null)}
+                onRemoveImage={() => onRemoveImage()}
+                onClickConfirm={onSubmitSertifikasi(onHandleSertifikasi)}
+                errorsBidang={errorsSertifikasi.Id_Bidang}
+                errorsNamaLembaga={errorsSertifikasi.NamaLembaga}
+                errorsImage={errorsSertifikasi.DokumenSertifikat}
+                registerBidang={onAddSertifikasi('Id_Bidang')}
+                registerNamaLembaga={onAddSertifikasi('NamaLembaga')}
+            />
+
+            {/* edit box sertifikasi */}
+            <FormSertifikasi
+                isOpen={isOpenEditSertifikasi}
+                onClose={onCloseDialogSertifikat}
+                bidang={bidang}
+                previewImage={previewImage}
+                onChangeImage={(e) => onHandlePreviewImage(e.target.files[0])}
+                onRemoveImage={() => onRemoveImage()}
+                // onClickConfirm={onSubmitSertifikasi(onHandleUpdateSertifikasi)}
+                errorsBidang={errorsSertifikasi.Id_Bidang}
+                errorsNamaLembaga={errorsSertifikasi.NamaLembaga}
+                errorsImage={errorsSertifikasi.DokumenSertifikat}
+                registerBidang={onAddSertifikasi('Id_Bidang')}
+                registerNamaLembaga={onAddSertifikasi('NamaLembaga')}
+                onClickDelete={()=>onDeleteSertifikat()}
             />
         </Layout>
 

@@ -5,7 +5,13 @@ import InputField from './InputField';
 import SelectInput from './SelectInput';
 import InputImage from './InputImage';
 
-const FormSertifikasi = ({ isOpen, onClickConfirm, onClickDelete, onClose, bidang, onChangeImage, onRemoveImage, previewImage }) => {
+const FormSertifikasi = (
+    {
+        isOpen, onClickConfirm, onClickDelete, onClose, bidang, onChangeImage, onRemoveImage, 
+        previewImage, errorsNamaLembaga, registerNamaLembaga, registerBidang, errorsBidang,
+        registerImage, errorsImage
+    }
+) => {
     return (
         <PopUpDialog
             title={'Sertifikasi'}
@@ -18,10 +24,16 @@ const FormSertifikasi = ({ isOpen, onClickConfirm, onClickDelete, onClose, bidan
                     <InputField
                         label={'Nama Lembaga'}
                         type={'text'}
+                        errorsName={errorsNamaLembaga}
+                        errorsMessage={errorsNamaLembaga?.message}
+                        register={registerNamaLembaga}
                     />
                     <SelectInput
                         label={'Bidang'}
                         placeholder={'Pilih bidang'}
+                        errorsName={errorsBidang}
+                        errorsMessage={errorsBidang?.message}
+                        register={registerBidang}
                     >
                         {
                             bidang?.map((data) => (
@@ -29,10 +41,13 @@ const FormSertifikasi = ({ isOpen, onClickConfirm, onClickDelete, onClose, bidan
                             ))
                         }
                     </SelectInput>
-                    <InputImage 
+                    <InputImage
                         onChangeImage={onChangeImage}
                         onRemoveImage={onRemoveImage}
                         previewImage={previewImage}
+                        register={registerImage}
+                        errorsName={errorsImage}
+                        errorsMessage={errorsImage?.message}
                     />
                 </Box>
             }

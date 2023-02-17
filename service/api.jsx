@@ -35,14 +35,14 @@ export const api = {
     getAllKota: () =>
         instance({
             method: `GET`,
-            url : `data_kota?size=516`,
+            url: `data_kota?size=516`,
         }),
     getAllProvinsi: () =>
         instance({
             method: `GET`,
             url: `data_provinsi?size=34`,
         }),
-    getAllPendidikan: () => 
+    getAllPendidikan: () =>
         instance({
             method: `GET`,
             url: `data_pendidikan?size=14`
@@ -52,4 +52,14 @@ export const api = {
             method: `GET`,
             url: `data_bidang`
         }),
+    uploadImage: (token, data) =>
+        instance({
+            method: `POST`,
+            url: `upload_image`,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            },
+            data: data
+        })
 }
